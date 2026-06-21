@@ -7,6 +7,45 @@
   Upload: 'Upload',
 };
 
+const READER_STORAGE_KEY = 'aperture-selected-photo';
+
+function saveReaderSelection(photo) {
+  // Store only the selected photo and any uploaded images (data URLs).
+  // Avoid saving the full gallery to prevent exceeding sessionStorage limits.
+  const payload = {
+    selectedId: photo.id,
+    selectedPhoto: {
+      id: photo.id,
+      title: photo.title,
+      author: photo.author,
+      cat: photo.cat,
+      src: photo.src,
+      description: photo.description || ''
+    }
+  };
+
+  const uploads = PHOTOS.filter(item => item.cat === 'Upload').map(({ id, title, author, cat, src, description }) => ({ id, title, author, cat, src, description }));
+  if (uploads.length) payload.uploads = uploads;
+  // Also store a lightweight gallery (metadata only) so reader can navigate built-in photos.
+  payload.gallery = PHOTOS.map(({ id, title, author, cat, src, description }) => ({ id, title, author, cat, src, description }));
+
+  try {
+    sessionStorage.setItem(READER_STORAGE_KEY, JSON.stringify(payload));
+  } catch (error) {
+    console.warn('Unable to save reader photo:', error);
+    // Try a minimal fallback with just the selected photo
+    const fallback = {
+      selectedId: photo.id,
+      selectedPhoto: payload.selectedPhoto
+    };
+    try {
+      sessionStorage.setItem(READER_STORAGE_KEY, JSON.stringify(fallback));
+    } catch (err2) {
+      console.warn('Unable to save fallback reader photo:', err2);
+    }
+  }
+}
+
 const PHOTOS = [
   {
     id: 1,
@@ -29,7 +68,7 @@ const PHOTOS = [
     title: 'Concrete Light',
     author: 'Yui Tanaka',
     cat: 'Urban',
-    src: 'https://images.unsplash.com/photo-1495486241858-5f02b8d3f37f?auto=format&fit=crop&w=1200&q=80',
+    src: 'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80',
     description: 'Hard edges softened by warm sunlight, capturing urban architecture in detail.'
   },
   {
@@ -53,7 +92,7 @@ const PHOTOS = [
     title: 'Soft Flame',
     author: 'Elara Voss',
     cat: 'Abstract',
-    src: 'https://images.unsplash.com/photo-1500530853340-a3a8d24e0b8d?auto=format&fit=crop&w=1200&q=80',
+    src: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=1200&q=80',
     description: 'A soft, abstract glow that feels warm and crafted for reflection.'
   },
   {
@@ -61,7 +100,7 @@ const PHOTOS = [
     title: 'Old Walls',
     author: 'Hana Sato',
     cat: 'Urban',
-    src: 'https://images.unsplash.com/photo-1489158633940-9c7d0c19f4be?auto=format&fit=crop&w=1200&q=80',
+    src: 'https://images.unsplash.com/photo-1495567720989-cebdbdd97913?auto=format&fit=crop&w=1200&q=80',
     description: 'Urban textures and history captured in a single architectural frame.'
   },
   {
@@ -101,7 +140,7 @@ const PHOTOS = [
     title: 'Reflections',
     author: 'Elara Voss',
     cat: 'Urban',
-    src: 'https://images.unsplash.com/photo-1495462913691-ffe0d22c32f2?auto=format&fit=crop&w=1200&q=80',
+    src: 'https://images.unsplash.com/photo-1516117172878-fd2c41f4a759?auto=format&fit=crop&w=1200&q=80',
     description: 'Light and glass meet in a reflective urban composition.'
   }
 ];
@@ -162,15 +201,8 @@ function createCard(photo, index) {
 
 function showPreview(index) {
   const photo = PHOTOS[index];
-  const params = new URLSearchParams({
-    id: photo.id,
-    title: photo.title,
-    author: photo.author,
-    cat: photo.cat,
-    src: photo.src,
-    description: photo.description || ''
-  });
-  window.location.href = `reader.html?${params.toString()}`;
+  saveReaderSelection(photo);
+  window.location.href = `reader.html?id=${encodeURIComponent(photo.id)}`;
 }
 
 function buildFilters() {
@@ -222,23 +254,75 @@ function renderGrid() {
   noResults.style.display = visiblePhotos.length === 0 ? 'block' : 'none';
 }
 
-function handleFiles(files) {
+function toDataURL(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(file);
+  });
+}
+
+// Simple IndexedDB helper for storing uploads (data URLs) so we don't save large blobs in sessionStorage
+function idbOpen() {
+  return new Promise((resolve, reject) => {
+    try {
+      const req = indexedDB.open('aperture-db', 1);
+      req.onupgradeneeded = () => {
+        const db = req.result;
+        if (!db.objectStoreNames.contains('uploads')) db.createObjectStore('uploads', { keyPath: 'id' });
+      };
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    } catch (e) {
+      reject(e);
+    }
+  });
+}
+
+function idbPutUpload(item) {
+  return idbOpen().then(db => new Promise((res, rej) => {
+    const tx = db.transaction('uploads', 'readwrite');
+    const store = tx.objectStore('uploads');
+    const r = store.put(item);
+    r.onsuccess = () => res(true);
+    r.onerror = () => rej(r.error);
+  })).catch(() => false);
+}
+
+function idbGetAllUploads() {
+  return idbOpen().then(db => new Promise((res, rej) => {
+    const tx = db.transaction('uploads', 'readonly');
+    const store = tx.objectStore('uploads');
+    const r = store.getAll();
+    r.onsuccess = () => res(r.result || []);
+    r.onerror = () => rej(r.error);
+  })).catch(() => []);
+}
+
+async function handleFiles(files) {
   const validFiles = Array.from(files).filter(file => file.type.startsWith('image/'));
   if (!validFiles.length) return;
 
-  validFiles.forEach(file => {
-    const url = URL.createObjectURL(file);
-    const photo = {
+  const uploads = await Promise.all(validFiles.map(async file => {
+    const dataURL = await toDataURL(file);
+    return {
       id: nextId++,
       title: file.name.replace(/\.[^/.]+$/, ''),
       author: 'Local upload',
       cat: 'Upload',
-      src: url,
+      src: dataURL,
       description: 'A local photo added to the gallery for quick reading and sharing.'
     };
-    PHOTOS.push(photo);
-  });
+  }));
 
+  PHOTOS.push(...uploads);
+  // Persist full upload data (including dataURL) to IndexedDB to avoid exceeding sessionStorage quota
+  try {
+    await Promise.all(uploads.map(u => idbPutUpload(u)));
+  } catch (e) {
+    console.warn('Unable to save uploads to IndexedDB:', e);
+  }
   buildFilters();
   renderGrid();
 }
@@ -248,8 +332,8 @@ function openFileDialog() {
 }
 
 uploadButton.addEventListener('click', openFileDialog);
-fileInput.addEventListener('change', event => {
-  handleFiles(event.target.files);
+fileInput.addEventListener('change', async event => {
+  await handleFiles(event.target.files);
   event.target.value = '';
 });
 

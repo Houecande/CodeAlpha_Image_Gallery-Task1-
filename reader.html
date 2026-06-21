@@ -33,6 +33,17 @@
     </section>
   </main>
 
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <div class="lightbox-backdrop" id="lightbox-backdrop"></div>
+    <div class="lightbox-content" role="dialog" aria-modal="true">
+      <button class="lightbox-close" id="lightbox-close" aria-label="Close lightbox">×</button>
+      <button class="lightbox-nav prev" id="lightbox-prev" type="button" aria-label="Previous photo">‹</button>
+      <button class="lightbox-nav next" id="lightbox-next" type="button" aria-label="Next photo">›</button>
+      <img class="lightbox-image" id="lightbox-image" alt="" />
+      <p class="lightbox-caption" id="lightbox-caption"></p>
+    </div>
+  </div>
+
   <script src="assets/JS/reader.js"></script>
 </body>
 </html>
