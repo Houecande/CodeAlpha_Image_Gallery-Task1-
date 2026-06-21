@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lumière & Douceur — Image Gallery</title>
+  <title>Light & Grace — Image Gallery</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
@@ -15,31 +15,30 @@
   <header class="g-header">
     <div>
       <p class="g-eyebrow">Image Gallery — CodeAlpha</p>
-      <h1 class="g-title">Lumière <em>&amp;</em> Douceur</h1>
+      <h1 class="g-title">Light <em>&amp;</em> Grace</h1>
     </div>
-    <p class="g-count" id="count-label" aria-live="polite">24 œuvres</p>
+    <p class="g-count" id="count-label" aria-live="polite">24 works</p>
   </header>
 
   <!-- FILTERS -->
-  <nav class="g-filters" id="filters" aria-label="Filtrer par catégorie"></nav>
-  <div class="g-divider" role="separator"></div>
+  <nav class="g-filters" id="filters" aria-label="Filter by category"></nav>
 
   <!-- GRID -->
   <main>
     <div class="masonry-grid" id="grid"></div>
-    <p class="no-results" id="no-results" role="status">Aucune image dans cette catégorie.</p>
+    <p class="no-results" id="no-results" role="status">No images in this category.</p>
   </main>
 
   <!-- LIGHTBOX -->
-  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Visionneuse d'image">
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
     <div class="lb-progress-wrap" aria-hidden="true">
       <div class="lb-progress" id="lb-progress"></div>
     </div>
 
-    <button class="lb-close" id="lb-close" aria-label="Fermer la visionneuse">&#x2715;</button>
+    <button class="lb-close" id="lb-close" aria-label="Close viewer">&#x2715;</button>
 
     <div class="lb-inner">
-      <button class="lb-btn lb-prev" id="lb-prev" aria-label="Image précédente">&#8249;</button>
+      <button class="lb-btn lb-prev" id="lb-prev" aria-label="Previous image">&#8249;</button>
 
       <div class="lb-img-wrap">
         <img class="lb-img" id="lb-img" src="" alt="" />
@@ -53,12 +52,12 @@
         </div>
       </div>
 
-      <button class="lb-btn lb-next" id="lb-next" aria-label="Image suivante">&#8250;</button>
+      <button class="lb-btn lb-next" id="lb-next" aria-label="Next image">&#8250;</button>
     </div>
 
     <div class="keyboard-hint" aria-hidden="true">
-      <span class="key-chip"><kbd>←</kbd><kbd>→</kbd> naviguer</span>
-      <span class="key-chip"><kbd>Esc</kbd> fermer</span>
+      <span class="key-chip"><kbd>←</kbd><kbd>→</kbd> navigate</span>
+      <span class="key-chip"><kbd>Esc</kbd> close</span>
     </div>
   </div>
 
