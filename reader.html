@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aperture — Reader</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/CSS/style.css" />
+</head>
+<body>
+  <header class="nav-bar">
+    <a href="Landing_Page.html" class="brand">
+      <svg class="brand-mark" viewBox="0 0 26 26" aria-hidden="true">
+        <circle cx="13" cy="13" r="9"></circle>
+        <path d="M13 4 L13 8 M22 13 L18 13 M13 22 L13 18 M4 13 L8 13"></path>
+      </svg>
+      Aperture
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">Gallery</a>
+      <a href="Landing_Page.html">Home</a>
+    </nav>
+  </header>
+
+  <main class="reader-page">
+    <a href="index.html" class="back-link">← Back to gallery</a>
+    <section class="reader-panel" id="reader-view">
+      <div class="reader-card empty">
+        <p class="preview-label">No image selected. Open a photo from the gallery to read it here.</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="assets/JS/reader.js"></script>
+</body>
+</html>

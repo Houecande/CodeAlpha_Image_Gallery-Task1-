@@ -1,65 +1,70 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Light & Grace — Image Gallery</title>
+  <title>Aperture — Gallery</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="assets/CSS/style.css" />
 </head>
 <body>
-
-  <!-- HEADER -->
-  <header class="g-header">
-    <div>
-      <p class="g-eyebrow">Image Gallery — CodeAlpha</p>
-      <h1 class="g-title">Light <em>&amp;</em> Grace</h1>
-    </div>
-    <p class="g-count" id="count-label" aria-live="polite">24 works</p>
+  <header class="nav-bar">
+    <a href="Landing_Page.html" class="brand">
+      <svg class="brand-mark" viewBox="0 0 26 26" aria-hidden="true">
+        <circle cx="13" cy="13" r="9"></circle>
+        <path d="M13 4 L13 8 M22 13 L18 13 M13 22 L13 18 M4 13 L8 13"></path>
+      </svg>
+      Aperture
+    </a>
+    <nav class="nav-links">
+      <a href="index.html" class="active">Gallery</a>
+      <a href="Landing_Page.html">Home</a>
+    </nav>
   </header>
 
-  <!-- FILTERS -->
-  <nav class="g-filters" id="filters" aria-label="Filter by category"></nav>
-
-  <!-- GRID -->
-  <main>
-    <div class="masonry-grid" id="grid"></div>
-    <p class="no-results" id="no-results" role="status">No images in this category.</p>
-  </main>
-
-  <!-- LIGHTBOX -->
-  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
-    <div class="lb-progress-wrap" aria-hidden="true">
-      <div class="lb-progress" id="lb-progress"></div>
+  <section class="hero hero-large">
+    <div class="hero-copy-block">
+      <p class="eyebrow">Free stock images</p>
+      <h1 class="site-title">Photos that<br><em>breathe.</em></h1>
+      <p class="hero-copy">A curated collection of high-definition images. Browse by category, add your own, open each shot in full format.</p>
+      <form id="search-form" class="search-form" role="search">
+        <input id="search-input" type="search" placeholder="Search by title, author, category…" aria-label="Search images" />
+        <button type="submit" class="search-button">Search</button>
+      </form>
     </div>
-
-    <button class="lb-close" id="lb-close" aria-label="Close viewer">&#x2715;</button>
-
-    <div class="lb-inner">
-      <button class="lb-btn lb-prev" id="lb-prev" aria-label="Previous image">&#8249;</button>
-
-      <div class="lb-img-wrap">
-        <img class="lb-img" id="lb-img" src="" alt="" />
-        <div class="lb-info">
-          <div>
-            <p class="lb-cat-label" id="lb-cat"></p>
-            <p class="lb-title" id="lb-title"></p>
-            <p class="lb-author" id="lb-author"></p>
-          </div>
-          <p class="lb-counter" id="lb-counter" aria-live="polite"></p>
+    <div class="hero-panel">
+      <div class="hero-card">
+        <p class="hero-card-title">Popular categories</p>
+        <div class="hero-pill-row">
+          <span class="pill">Landscape</span>
+          <span class="pill">Portrait</span>
+          <span class="pill">Nature</span>
+          <span class="pill">Urban</span>
+          <span class="pill">Abstract</span>
         </div>
       </div>
-
-      <button class="lb-btn lb-next" id="lb-next" aria-label="Next image">&#8250;</button>
     </div>
+  </section>
 
-    <div class="keyboard-hint" aria-hidden="true">
-      <span class="key-chip"><kbd>←</kbd><kbd>→</kbd> navigate</span>
-      <span class="key-chip"><kbd>Esc</kbd> close</span>
+  <section class="toolbar">
+    <div class="toolbar-actions">
+      <button class="upload-button" id="upload-button">Upload images</button>
+      <input id="file-input" type="file" accept="image/*" multiple hidden />
+      <div class="drop-zone" id="drop-zone">Drag and drop files here</div>
     </div>
-  </div>
+    <div class="toolbar-meta">
+      <span class="gallery-count" id="count-label" aria-live="polite">12 photos</span>
+      <span>Click on a photo to open it in full format</span>
+    </div>
+    <nav class="filters" id="filters" aria-label="Filter by category"></nav>
+  </section>
+
+  <main class="gallery">
+    <div class="masonry-grid" id="grid"></div>
+    <p class="no-results" id="no-results">No images match this search.</p>
+  </main>
 
   <script src="assets/JS/main.js"></script>
 </body>
