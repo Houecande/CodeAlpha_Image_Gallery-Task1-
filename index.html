@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lumière & Douceur — Image Gallery</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/CSS/style.css" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="g-header">
+    <div>
+      <p class="g-eyebrow">Image Gallery — CodeAlpha</p>
+      <h1 class="g-title">Lumière <em>&amp;</em> Douceur</h1>
+    </div>
+    <p class="g-count" id="count-label" aria-live="polite">24 œuvres</p>
+  </header>
+
+  <!-- FILTERS -->
+  <nav class="g-filters" id="filters" aria-label="Filtrer par catégorie"></nav>
+  <div class="g-divider" role="separator"></div>
+
+  <!-- GRID -->
+  <main>
+    <div class="masonry-grid" id="grid"></div>
+    <p class="no-results" id="no-results" role="status">Aucune image dans cette catégorie.</p>
+  </main>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Visionneuse d'image">
+    <div class="lb-progress-wrap" aria-hidden="true">
+      <div class="lb-progress" id="lb-progress"></div>
+    </div>
+
+    <button class="lb-close" id="lb-close" aria-label="Fermer la visionneuse">&#x2715;</button>
+
+    <div class="lb-inner">
+      <button class="lb-btn lb-prev" id="lb-prev" aria-label="Image précédente">&#8249;</button>
+
+      <div class="lb-img-wrap">
+        <img class="lb-img" id="lb-img" src="" alt="" />
+        <div class="lb-info">
+          <div>
+            <p class="lb-cat-label" id="lb-cat"></p>
+            <p class="lb-title" id="lb-title"></p>
+            <p class="lb-author" id="lb-author"></p>
+          </div>
+          <p class="lb-counter" id="lb-counter" aria-live="polite"></p>
+        </div>
+      </div>
+
+      <button class="lb-btn lb-next" id="lb-next" aria-label="Image suivante">&#8250;</button>
+    </div>
+
+    <div class="keyboard-hint" aria-hidden="true">
+      <span class="key-chip"><kbd>←</kbd><kbd>→</kbd> naviguer</span>
+      <span class="key-chip"><kbd>Esc</kbd> fermer</span>
+    </div>
+  </div>
+
+  <script src="assets/JS/main.js"></script>
+</body>
+</html>
